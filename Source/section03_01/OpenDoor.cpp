@@ -20,15 +20,17 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	actorThatOpen = GetWorld()->GetFirstPlayerController()->GetPawn();
+	owner = GetOwner();
 
 	
 }
 
-void UOpenDoor::OpenDoor() {
-	AActor* owner = GetOwner();
-	FRotator rotator(0.f, 60.f, 0.f);
-	owner->SetActorRotation(rotator);
-	UE_LOG(LogTemp, Warning, TEXT("Open doorrrrrrrrrrr"));
+void UOpenDoor::OpenDoor() {		
+	owner->SetActorRotation(FRotator(0.f, 90.0f, 0.f));	
+}
+
+void UOpenDoor::CloseDoor() {
+	owner->SetActorRotation(FRotator(0.f, 0.0f, 0.f));
 }
 
 
@@ -39,6 +41,10 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 
 	if (triggerVolume->IsOverlappingActor(actorThatOpen)) {
 		OpenDoor();
+		lastOpenDoorTime = GetWorld()->GetTimeSeconds();
+	}
+	if (GetWorld()->GetTimeSeconds() - lastOpenDoorTime > doorCloseDelay) {
+		CloseDoor();
 	}
 }
 
