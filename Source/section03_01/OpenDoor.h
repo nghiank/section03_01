@@ -24,6 +24,7 @@ public:
 	void OpenDoor();
 	void CloseDoor();
 private:
+	float GetTotalMassOfActorsOnPlate();
 
 	UPROPERTY(VisibleAnywhere)
 	float openAngle = 90.0f;
